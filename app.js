@@ -2,13 +2,14 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');  // Модуль для работы с временными папками
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Конфигурируем multer для загрузки файлов
+// Конфигурируем multer для загрузки файлов в временную папку
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './uploads');
+        cb(null, os.tmpdir());  // Используем временную папку
     },
     filename: (req, file, cb) => {
         cb(null, `${Date.now()}-${file.originalname}`);
@@ -26,7 +27,7 @@ app.get('/', (req, res) => {
 
 // Страница просмотра изображения
 app.get('/view/:imageId', (req, res) => {
-    const imagePath = path.join(__dirname, 'uploads', req.params.imageId);
+    const imagePath = path.join(os.tmpdir(), req.params.imageId);  // Путь к изображению в временной папке
     if (fs.existsSync(imagePath)) {
         res.sendFile(imagePath);
         // После первого просмотра удаляем файл
