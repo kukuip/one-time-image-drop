@@ -41,6 +41,7 @@ app.get('/view/:imageId', (req, res) => {
 
 // Обработка загрузки изображения
 app.post('/upload', upload.single('image'), (req, res) => {
+    console.log('Загружено изображение:', req.file);  // Логируем информацию о файле
     const imageId = req.file.filename;
     res.redirect(`/view/${imageId}`);
 });
