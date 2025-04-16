@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One Time Image Drop</title>
+</head>
+<body>
+    <h1>Загрузите изображение</h1>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="image" required />
+        <button type="submit">Загрузить</button>
+    </form>
+
+    <hr />
+
+    <h2>QR-код:</h2>
+    <div id="qr-code"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
+    <script>
+        const url = new URL(window.location.href);
+        if (url.pathname.startsWith('/view/')) {
+            const imageId = url.pathname.split('/')[2];
+            QRCode.toString(window.location.href, { type: 'url' }, function (err, url) {
+                if (err) console.error(err);
+                document.getElementById("qr-code").innerHTML = '<img src="' + url + '" />';
+            });
+        }
+    </script>
+</body>
+</html>
